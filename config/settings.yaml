@@ -1,0 +1,9 @@
+# External-facing configuration only
+mongodb:
+  uri: "mongodb://host.docker.internal:27017"  # For Windows Docker to local MongoDB
+  database_name: "modbus_data"
+
+collector:
+  polling_interval: 10
+  retry_interval: 30
+  log_level: "INFO"

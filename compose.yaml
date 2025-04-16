@@ -1,0 +1,90 @@
+services:
+  collector:
+    entrypoint: ["sh", "-c", "sleep 1 && python modbus_collector.py"]  # aguarda simulador iniciar primeiro
+    depends_on:
+      simulator:
+        condition: service_started
+    build:
+      context: .
+      dockerfile: collector/Dockerfile
+    volumes:
+      - ./config:/config
+    environment:
+      - CONFIG_DIR=/config
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - modbus-net  # For simulator communication
+      - host-net    # For MongoDB access
+
+  simulator:
+    build:
+      context: .
+      dockerfile: simulator/Dockerfile
+    volumes:
+      - ./config:/config
+    ports:
+      - "1502-1599:1502-1599"  # External exposure
+    networks:
+      - modbus-net  # Only needs to talk to collector
+    init: true
+    stop_grace_period: 1s
+    stop_signal: SIGTERM  # Changed from SIGKILL
+
+  flask:
+    build:
+      context: .
+      dockerfile: flask/Dockerfile
+    volumes:
+      - ./config:/config  # Mount host's ./config to /config in container
+      - ./flask/static:/app/static  # Static files volume
+    # Portas não abertas pois acesso externo é feito via nginx.
+    # ports:  
+    #   - "5000:5000"
+    environment:
+      - FLASK_DEBUG=${FLASK_DEBUG:-0}
+    networks:
+      - host-net  # For MongoDB access
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+#Será substituído por let's encrypt certbot em produção:
+  cert-generator:
+    image: alpine:latest
+    volumes:
+      - ./nginx/generate-certs.sh:/generate-certs.sh
+      - ./nginx/ssl:/certs
+    command: ["sh", "/generate-certs.sh"]
+    networks:
+      - host-net
+
+  nginx:
+    image: macbre/nginx-http3:latest
+    container_name: nginx
+    depends_on:
+      cert-generator:
+        condition: service_completed_successfully
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./flask/static:/app/static
+    ports:
+      - "80:80"
+      - "443:443/tcp"
+      - "443:443/udp"
+    networks:
+      - host-net
+
+networks:
+  modbus-net:
+    driver: bridge
+  host-net:
+    driver: bridge
+    name: host-access  # Explicit name for clarity
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1

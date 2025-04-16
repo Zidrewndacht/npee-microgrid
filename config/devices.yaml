@@ -1,0 +1,685 @@
+devices:
+  - name: "Medidor de Entrada"
+    host: "simulator"
+    port: 1502
+    collection: "input_meter"
+    slave_id: 1
+    registers:
+      # Medições individuais
+      - name: "Frequência de Entrada"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "f (Hz)"
+        label: "input_frequency"
+        unit: "Hz"
+        address: 2
+        
+      # Medições totais
+      - name: "Tensão Média"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Vm (V)"
+        label: "voltage_average"
+        unit: "V"
+        address: 4
+        
+      - name: "Corrente Total"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "It (A)"
+        label: "current_total"
+        unit: "A"
+        address: 6
+        
+      - name: "Potência Ativa Total"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Pt (kW)"
+        label: "power_total"
+        unit: "kW"
+        address: 8
+        
+      - name: "Potência Reativa Total"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "PRt"
+        label: "reactive_power_total"
+        unit: "kVAr"
+        address: 10 ################################### CORRIGIR
+        
+      - name: "Potência Aparente Total"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "PAt"
+        label: "apparent_power_total"
+        unit: "kVAr"
+        address: 12 ################################## CORRIGIR#
+        
+      - name: "Fator de Potência Total"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "FP"
+        label: "pf_total"
+        unit: "FP"
+        address: 14
+        
+      # Medições por fase (arrays)
+      - name: "Tensão por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "V (V)"
+        label: "voltage_per_phase"
+        unit: "V"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 16
+          - name: "ϕ2"
+            address: 18
+          - name: "ϕ3"
+            address: 20
+        
+      - name: "Corrente por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "I (A)"
+        label: "current_per_phase"
+        unit: "A"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 22
+          - name: "ϕ2"
+            address: 24
+          - name: "ϕ3"
+            address: 26
+        
+      - name: "Potência Ativa por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "P (kW)"
+        label: "active_power_per_phase"
+        unit: "kW"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 28
+          - name: "ϕ2"
+            address: 30
+          - name: "ϕ3"
+            address: 32
+
+      - name: "Potência Reativa por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "PR (kVAr)"
+        label: "reactive_power_per_phase"
+        unit: "kVAr"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 34
+          - name: "ϕ2"
+            address: 36
+          - name: "ϕ3"
+            address: 38
+
+      - name: "Potência Aparente por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "PA (kVA)"
+        label: "apparent_power_per_phase"
+        unit: "kVA"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 40
+          - name: "ϕ2"
+            address: 42
+          - name: "ϕ3"
+            address: 44
+
+      - name: "Fator de Potência por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "FP"
+        label: "pf_per_phase"
+        unit: "FP"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 46
+          - name: "ϕ2"
+            address: 48
+          - name: "ϕ3"
+            address: 50
+
+      - name: "THD de Tensão por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "THD(V) %"
+        label: "thd_voltage_per_phase"
+        unit: "%"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 52
+          - name: "ϕ2"
+            address: 54
+          - name: "ϕ3"
+            address: 56
+
+      - name: "THD de Corrente por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "THD(A) %"
+        label: "thd_current_per_phase"
+        unit: "%"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 58
+          - name: "ϕ2"
+            address: 60
+          - name: "ϕ3"
+            address: 62
+
+  # Painel Fotovoltaico
+  - name: "Painel Fotovoltaico"
+    host: "simulator"
+    port: 1503
+    collection: "pv_inverter"
+    slave_id: 3
+    registers:
+      - name: "Potência de saída"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Pdc (kW)"
+        label: "dc_power"
+        unit: "kW"
+        address: 40063   #0x07...?
+
+      - name: "Tensão DC"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Vdc (V)"
+        label: "dc_voltage"
+        unit: "V"
+        array: true
+        elements:
+          - name: "Célula 1"
+            address: 40065   #0x00...?
+          - name: "Célula 2"
+            address: 40067   #0x01...?
+
+      - name: "Corrente DC"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Idc (A)"
+        label: "dc_current"
+        unit: "A"
+        array: true
+        elements:
+          - name: "Célula 1"
+            address: 40069   #0x02...?
+          - name: "Célula 2"
+            address: 40071  #0x03...?
+
+      - name: "Tensão AC"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Vac (V)"
+        label: "ac_voltage"
+        unit: "V"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 40073   #0x04...?
+            #dispositivo não possui múltiplas fases
+
+      - name: "Corrente AC"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Iac (A)"
+        label: "ac_current"
+        unit: "A"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 40075   #0x05...?
+            #dispositivo não possui múltiplas fases
+
+      - name: "Frequência AC"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "f (Hz)"
+        label: "ac_frequency"
+        unit: "Hz"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 40077   #0x06...?
+            #dispositivo não possui múltiplas fases
+
+  # Q3: AC / DC (SPCAT 3000-22-06 + Li-Ion pack)
+  - name: "Conversor Q3 (SPCAT 3000-22-06 + bateria)"
+    host: "simulator"
+    port: 1504
+    collection: "q3_converter"
+    slave_id: 1
+    registers:
+      # AC Side (3-phase) - Per-phase measurements only
+      - name: "Tensão AC por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "V (V)"
+        label: "ac_voltage_per_phase"
+        unit: "V"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 41001
+          - name: "ϕ2"
+            address: 41003
+          - name: "ϕ3"
+            address: 41005
+
+      - name: "Corrente AC por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "I (A)"
+        label: "ac_current_per_phase"
+        unit: "A"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 41007
+          - name: "ϕ2"
+            address: 41009
+          - name: "ϕ3"
+            address: 41011
+
+      - name: "Potência Ativa AC por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "P (kW)"
+        label: "ac_active_power_per_phase"
+        unit: "kW"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 41013
+          - name: "ϕ2"
+            address: 41015
+          - name: "ϕ3"
+            address: 41017
+
+      - name: "Potência Retiva AC por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "PR (kW)"
+        label: "ac_active_power_per_phase"
+        unit: "kW"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 41013
+          - name: "ϕ2"
+            address: 41015
+          - name: "ϕ3"
+            address: 41017
+
+      # DC Side measurements
+      - name: "Tensão DC"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Tensão DC (V)"
+        label: "dc_voltage"
+        unit: "V"
+        address: 41021
+
+      - name: "Corrente DC"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Idc (A)"
+        label: "dc_current"
+        unit: "A"
+        address: 41023
+
+      - name: "Potência DC"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Pdc (kW)"
+        label: "dc_power"
+        unit: "kW"
+        address: 41025
+
+      # Frequency (common for AC side)
+      - name: "Frequência PLL"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "f (Hz)"
+        label: "pll_frequency"
+        unit: "Hz"
+        address: 41019
+
+  # Banco de Supercapacitores: Q2, Q4 (SPCC 2500-40)
+  - name: "Conversor Q2 (SPCC 2500-40 + Supercapacitor)"
+    host: "simulator"
+    port: 1505
+    collection: "q2_converter"
+    slave_id: 1
+    registers:
+      # DC Side measurements
+      - name: "Tensão DC1"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Tensão DC1 (V)"
+        label: "dc_voltage"
+        unit: "V"
+        address: 41021 ################################### CORRIGIR
+
+      - name: "Corrente DC1"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Idc (A)"
+        label: "dc_current"
+        unit: "A"
+        address: 41025 ################################### CORRIGIR
+
+      - name: "Potência DC1"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Pdc (kW)"
+        label: "dc_power"
+        unit: "kW"
+        address: 41027
+
+      # DC Side measurements
+      - name: "Tensão supercapacitor" #CC2
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Tensão DC (V)"
+        label: "supercap_voltage"
+        unit: "V"
+        address: 41023 ################################### CORRIGIR
+
+      - name: "Corrente supercapacitor"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Idc (A)"
+        label: "supercap_current"
+        unit: "A"
+        address: 41029 ################################### CORRIGIR
+
+  # Q1: AC / AC + DC (CMME 900-40-03)
+  - name: "Conversor Q1 (CMME 900-40-03)"
+    host: "simulator"
+    port: 1506
+    collection: "q1_converter"
+    slave_id: 1
+    registers:
+      # Medições individuais
+      - name: "Frequência de Entrada"
+        register_type: "holding"
+        data_type: "float"
+        scale: 0.1
+        chart_abbr: "f (Hz)"
+        label: "input_frequency"
+        unit: "Hz"
+        address: 41083
+        
+      # Medições totais
+      # - name: "Tensão Média"    #indisponível CMME 900-40-03
+      # - name: "Corrente Total"  #indisponível CMME 900-40-03
+
+      - name: "Potência Ativa AC1"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "AC1 Pt (kW)"
+        label: "ac1_power_total"
+        unit: "kW"
+        address: 41057
+        
+      - name: "Potência Reativa AC1"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "AC1 PRt"
+        label: "ac1_reactive_power_total"
+        unit: "kVAr"
+        address: 41365
+        
+      - name: "Potência Aparente AC1"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "AC1 PAt"
+        label: "ac1_apparent_power_total"
+        unit: "kVAr"
+        address: 41165
+        
+      # Medições por fase (arrays)
+      - name: "Tensão AC1 por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "V (V)"
+        label: "voltage_per_phase"
+        unit: "V"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 41027
+          - name: "ϕ2"
+            address: 41029
+          - name: "ϕ3"
+            address: 41031
+        
+      - name: "Corrente AC1 por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "I (A)"
+        label: "ac1_current_per_phase"
+        unit: "A"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 41043
+          - name: "ϕ2"
+            address: 41045
+          - name: "ϕ3"
+            address: 41047
+        
+      - name: "Potência Ativa AC1 por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "P (kW)"
+        label: "ac1_active_power_per_phase"
+        unit: "kW"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 41053
+          - name: "ϕ2"
+            address: 41055
+          - name: "ϕ3"
+            address: 41057
+
+      - name: "Potência Reativa AC1 por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "PR (kVAr)"
+        label: "ac1_reactive_power_per_phase"
+        unit: "kVAr"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 41059
+          - name: "ϕ2"
+            address: 41061
+          - name: "ϕ3"
+            address: 41063
+
+      - name: "Potência Aparente AC1 por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "PA (kVA)"
+        label: "ac1_apparent_power_per_phase"
+        unit: "kVA"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 41065
+          - name: "ϕ2"
+            address: 41067
+          - name: "ϕ3"
+            address: 41069
+
+      
+      - name: "Potência Ativa AC2"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "Pt (kW)"
+        label: "ac2_power_total"
+        unit: "kW"
+        address: 41057
+        
+      - name: "Potência Reativa AC2"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "PRt"
+        label: "ac2_reactive_power_total"
+        unit: "kVAr"
+        address: 41565
+        
+      - name: "Potência Aparente AC2"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "PAt"
+        label: "ac2_apparent_power_total"
+        unit: "kVAr"
+        address: 41265
+        
+      # Medições por fase (arrays)
+      - name: "Tensão AC2 por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "V (V)"
+        label: "ac2_voltage_per_phase"
+        unit: "V"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 41027
+          - name: "ϕ2"
+            address: 41029
+          - name: "ϕ3"
+            address: 41031
+        
+      - name: "Corrente AC2 por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "I (A)"
+        label: "ac2_current_per_phase"
+        unit: "A"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 41043
+          - name: "ϕ2"
+            address: 41045
+          - name: "ϕ3"
+            address: 41047
+        
+      - name: "Potência Ativa AC2 por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "P (kW)"
+        label: "ac2_active_power_per_phase"
+        unit: "kW"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 41053
+          - name: "ϕ2"
+            address: 41055
+          - name: "ϕ3"
+            address: 41057
+
+      - name: "Potência Reativa AC2 por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "PR (kVAr)"
+        label: "ac2_reactive_power_per_phase"
+        unit: "kVAr"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 41059
+          - name: "ϕ2"
+            address: 41061
+          - name: "ϕ3"
+            address: 41063
+
+      - name: "Potência Aparente AC2 por Fase"
+        register_type: "holding"
+        data_type: "float"
+        scale: 1
+        chart_abbr: "PA (kVA)"
+        label: "ac2_apparent_power_per_phase"
+        unit: "kVA"
+        array: true
+        elements:
+          - name: "ϕ1"
+            address: 41265  ################################ CORRIGIR
+          - name: "ϕ2"
+            address: 41267 ################################ CORRIGIR
+          - name: "ϕ3"
+            address: 41269 ################################ CORRIGIR
