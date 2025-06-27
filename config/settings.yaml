@@ -1,6 +1,6 @@
 # External-facing configuration only
 mongodb:
-  uri: "mongodb://host.docker.internal:27017"  # For Windows Docker to local MongoDB
+  uri: "mongodb://mongodb:27017"  # For Windows Docker to local MongoDB
   database_name: "modbus_data"
 
 collector:
