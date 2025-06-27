@@ -1,8 +1,22 @@
 services:
+  # Add this new MongoDB service
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    volumes:
+      - mongodb_data:/data/db  # Persistent storage for MongoDB
+    networks:
+      host-net:
+        aliases:  # Add this alias
+          - host.docker.internal  # Resolve to MongoDB container
+    restart: unless-stopped
+
   collector:
-    entrypoint: ["sh", "-c", "sleep 1 && python modbus_collector.py"]  # aguarda simulador iniciar primeiro
+    entrypoint: ["sh", "-c", "sleep 1 && python modbus_collector.py"]
     depends_on:
       simulator:
+        condition: service_started
+      mongodb:  # Add dependency
         condition: service_started
     build:
       context: .
@@ -11,47 +25,47 @@ services:
       - ./config:/config
     environment:
       - CONFIG_DIR=/config
+      # Add explicit MongoDB URI override:
+      - MONGO_URI=mongodb://mongodb:27017  # Direct container connection
     restart: unless-stopped
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     networks:
-      - modbus-net  # For simulator communication
-      - host-net    # For MongoDB access
+      - modbus-net
+      - host-net
+    # REMOVED: extra_hosts (no longer needed)
 
-  simulator:
+  simulator:  # No changes needed
     build:
       context: .
       dockerfile: simulator/Dockerfile
     volumes:
       - ./config:/config
     ports:
-      - "1502-1599:1502-1599"  # External exposure
+      - "1502-1599:1502-1599"
     networks:
-      - modbus-net  # Only needs to talk to collector
+      - modbus-net
     init: true
     stop_grace_period: 1s
-    stop_signal: SIGTERM  # Changed from SIGKILL
+    stop_signal: SIGTERM
 
   flask:
+    depends_on:
+      mongodb:  # Add dependency
+        condition: service_started
     build:
       context: .
       dockerfile: flask/Dockerfile
     volumes:
-      - ./config:/config  # Mount host's ./config to /config in container
-      - ./flask/static:/app/static  # Static files volume
-    # Portas não abertas pois acesso externo é feito via nginx.
-    # ports:  
-    #   - "5000:5000"
+      - ./config:/config
+      - ./flask/static:/app/static
     environment:
       - FLASK_DEBUG=${FLASK_DEBUG:-0}
+      - MONGO_URI=mongodb://mongodb:27017  # Direct container connection
     networks:
-      - host-net  # For MongoDB access
+      - host-net
     restart: unless-stopped
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    # REMOVED: extra_hosts (no longer needed)
 
-#Será substituído por let's encrypt certbot em produção:
-  cert-generator:
+  cert-generator:  # No changes needed
     image: alpine:latest
     volumes:
       - ./nginx/generate-certs.sh:/generate-certs.sh
@@ -60,7 +74,7 @@ services:
     networks:
       - host-net
 
-  nginx:
+  nginx:  # No changes needed
     image: macbre/nginx-http3:latest
     container_name: nginx
     depends_on:
@@ -77,12 +91,16 @@ services:
     networks:
       - host-net
 
+# Add volume declaration for MongoDB
+volumes:
+  mongodb_data:  # Named volume for MongoDB persistence
+
 networks:
   modbus-net:
     driver: bridge
   host-net:
     driver: bridge
-    name: host-access  # Explicit name for clarity
+    name: host-access
     attachable: true
     ipam:
       config:

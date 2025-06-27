@@ -5,6 +5,8 @@ import yaml
 from pathlib import Path
 import logging
 from werkzeug.middleware.proxy_fix import ProxyFix
+import os
+debug_mode = os.getenv('FLASK_DEBUG', 'false').lower() == 'false'
 
 app = Flask(__name__, static_url_path='')
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
@@ -106,9 +108,12 @@ def get_devices():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/data/<collection>/<int:limit>')
-@app.route('/api/data/<collection>')
+@app.route('/api/data/<collection>', strict_slashes=False)
 def get_data(collection, limit=1):
     """Fetch latest data from MongoDB"""
+    MAX_LIMIT = 50  # Adjust as needed
+    if limit > MAX_LIMIT:
+        return jsonify({"error": f"Limit exceeds maximum of {MAX_LIMIT}"}), 400
     try:
         data = data_model.get_latest_data(collection, limit)
         return Response(
@@ -119,6 +124,16 @@ def get_data(collection, limit=1):
         logger.error(f"Data fetch error: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
+@app.route('/health') # For Docker
+def health_check():
+    try:
+        # Verify MongoDB connection
+        data_model.db.command('ping')
+        return jsonify({"status": "healthy"})
+    except Exception as e:
+        logger.error(f"Health check failed: {str(e)}")
+        return jsonify({"status": "unhealthy"}), 500
+    
 @app.route('/')
 def index():
     return render_template('data_view.html')

@@ -5,5 +5,17 @@ docker compose up --build
 ```
 
 
-- Done: Docker-compose, collector, simulator, flask, gunicorn, nginx, http3
-- Still missing/incomplete: load/save dashboard, README, LICENSE
+Done:
+
+Docker-compose:
+    collector
+    simulator
+    flask
+        gunicorn
+
+Still missing:
+    nginx
+        http3
+        gzip
+    
+load/save dashboard
