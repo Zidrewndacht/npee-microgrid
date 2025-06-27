@@ -9,6 +9,14 @@
 
 - MongoDB database
 - Dockerized, nginx, HTTP/3
+- Fully open-source
+- Modern web-based, containerized, lightweight stack:
+    - SCADA alternatives are either proprietary (give examples) or based on legacy stacks (scadaBR, SCADA-LTS, which uses Java).
+    - SCADA alternatives, by having much more complex functionality, end up having much Larger footprint
+    - Our implementation is build from the ground up to be ready for the modern Web: HTTP/3 QUIC, TLS 1.3, 
+    IPv6 ready, which makes it more adequate for IoT Modbus TCP devices which may need IPv6 connectivity 
+    now or (even more so) in the future.
+
 
 
 Autodetect from mongoDB data:
@@ -26,3 +34,4 @@ Usar devices.yaml para gerar a lista de cards?
     obter friendly_name, unit e abbr de devices.yaml em vez de hardcode no JS.
 
 Necessário descrever em detalhes configuração YAML e suas vantagens: fácil definição de layout (arrays para 3-phase data), nomes intuitivos/traduzidos, siglas e letras de unidade
+

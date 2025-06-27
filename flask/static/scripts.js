@@ -271,7 +271,7 @@ function init() {
         },
         columnOpts: {
             breakpointForWindow: false,  // test window vs grid size
-            breakpoints: [{w:600, c:2},{w:900, c:3},{w:1200, c:4},{w:1500, c:5},{w:1800, c:6},{w:2100, c:7},{w:2400, c:8}]
+            breakpoints: [{w:720, c:2},{w:960, c:3},{w:1250, c:4},{w:1500, c:5},{w:1800, c:6},{w:2000, c:7},{w:2160, c:8}]
         },
     }, chartSelectionContainer);
     selectionGrid.on('added', function(event, items) {
@@ -329,9 +329,10 @@ function init() {
                     addChartPlaceholder(device.name, 'Visão Geral', chartId);
                 }
 
-                // Visão Completa (all registers)
-                const completeChartId = `${collection}__complete`;
-                addChartPlaceholder(device.name, 'Visão Completa', completeChartId);
+                // desativando visão completa porque excesso de informação não parece útil o suficiente como atualmente implementado.
+                // // Visão Completa (all registers)
+                // const completeChartId = `${collection}__complete`;
+                // addChartPlaceholder(device.name, 'Visão Completa', completeChartId);
 
                 // [Métrica] por fase (each array register)
                 registers.filter(r => r.array).forEach(register => {
@@ -368,6 +369,22 @@ function init() {
 
 
 
+// function addChartPlaceholder(friendlyCollectionName, title, chartId) {
+//     const placeholder = document.createElement('div');
+//     placeholder.className = 'grid-stack-item';
+//     placeholder.setAttribute('gs-w', '1');
+//     placeholder.setAttribute('gs-h', '1');
+
+//     const content = document.createElement('div');
+//     content.className = 'grid-stack-item-content';
+//     content.innerHTML = `<div class="placeholder-wrapper"><div class="placeholder-collection-name">${friendlyCollectionName}</div><div class="placeholder-chart-name">${title}</div></div>`;
+//     content.setAttribute('data-chart-id', chartId);
+
+//     placeholder.appendChild(content);
+//     selectionGrid.addWidget(placeholder);
+// }
+
+
 function addChartPlaceholder(friendlyCollectionName, title, chartId) {
     const placeholder = document.createElement('div');
     placeholder.className = 'grid-stack-item';
@@ -379,9 +396,17 @@ function addChartPlaceholder(friendlyCollectionName, title, chartId) {
     content.innerHTML = `<div class="placeholder-wrapper"><div class="placeholder-collection-name">${friendlyCollectionName}</div><div class="placeholder-chart-name">${title}</div></div>`;
     content.setAttribute('data-chart-id', chartId);
 
+    // Get collection name from chartId
+    const collection = chartId.split('__')[0];
+    // Apply color to the wrapper
+    const wrapper = content.querySelector('.placeholder-wrapper');
+    wrapper.style.backgroundColor = stringToColor(collection);
+    // wrapper.style.border = '1px solid rgba(0,0,0,0.1)'; // subtle border
+
     placeholder.appendChild(content);
     selectionGrid.addWidget(placeholder);
 }
+
 
 // Function to flatten an object
 function flattenObject(obj, parentKey = '', result = {}) {
@@ -837,7 +862,20 @@ function resetChartData(chart, maxDataPoints) {
 
 
 
-
+function stringToColor(str) {
+    // Simple hash function to convert string to a number
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    // Convert hash to HSL values
+    const h = Math.abs(hash % 360);
+    const s = 30 + Math.abs(hash % 20); 
+    const l = 92 + Math.abs(hash % 5);
+    
+    return `hsl(${h}, ${s}%, ${l}%)`;
+}
 
 
 
