@@ -6,9 +6,7 @@ services:
     volumes:
       - mongodb_data:/data/db  # Persistent storage for MongoDB
     networks:
-      host-net:
-        aliases:  # Add this alias
-          - host.docker.internal  # Resolve to MongoDB container
+      - host-net
     restart: unless-stopped
 
   collector:
