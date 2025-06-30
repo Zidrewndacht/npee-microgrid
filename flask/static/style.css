@@ -178,8 +178,11 @@ button:hover{
     box-shadow: 0px 0px 10px -6px black;
     background: #feffffcc;
     border: 1px solid #999;
+    
+    background: var(--collection-color); /* fallback */
+    color: rgba(0,0,0,0.8); /* dark text for light backgrounds */
+    transition: background-color 0.3s ease;
 }
-
 
 
 #detailedChartsContainer {
