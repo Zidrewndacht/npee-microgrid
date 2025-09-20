@@ -4,18 +4,4 @@ To run:
 docker compose up --build
 ```
 
-
-Done:
-
-Docker-compose:
-    collector
-    simulator
-    flask
-        gunicorn
-
-Still missing:
-    nginx
-        http3
-        gzip
-    
-load/save dashboard
+This branch has the version published at Induscon 2025. It'll not receive any further functionality updates or bugfixes.
