@@ -1,3 +1,5 @@
+dnspython==2.7.0
+motor==3.7.1
 pymodbus==3.9.1
-pyyaml
-motor
+pymongo==4.13.2
+PyYAML==6.0.2
